@@ -25,10 +25,6 @@ jobs:
         run: npx playwright install
       - name: Start the development server
         run: npm run start-prod
-      - name: Wait for server to start
-        run: |
-          npx wait-on http://localhost:5000
-          sleep 5  
       - name: Run end-to-end tests
         run: npm run test:e2e
         env:
