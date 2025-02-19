@@ -21,10 +21,10 @@ jobs:
         run: npm run build
       - name: Run tests
         run: npm test
-      - name: Install Playwright Browsers
-        run: npx playwright install
-      - name: Run end-to-end tests
-        run: npm run test:e2e
-        env:
-          CI: true
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v5
+        with:
+          command: npm run test:e2e
+          start: npm run start-prod  # Inicia el servidor antes de los tests
+          wait-on: http://localhost:5000  # Espera a que el servidor esté disponible
 
