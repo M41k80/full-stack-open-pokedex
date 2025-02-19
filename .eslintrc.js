@@ -1,3 +1,5 @@
+
+
 module.exports = {
   settings: {
     react: {
@@ -9,11 +11,12 @@ module.exports = {
     es6: true,
     jest: true,
     node: true,
-    "cypress/globals": true
+    'cypress/globals': true
   },
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
+    'plugin:cypress/recommended',
   ],
   parser: '@babel/eslint-parser',
   parserOptions: {
@@ -40,7 +43,8 @@ module.exports = {
     'arrow-spacing': ['error', { before: true, after: true }],
     'no-console': 'error',
     'react/prop-types': 0,
-    "no-unused-vars": "warn",
-    "no-undef": "off"
+    'no-unused-vars': 'warn',
+    'no-undef': 'off',
+    'no-redeclare': 'off',
   },
 }
