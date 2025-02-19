@@ -26,5 +26,10 @@ jobs:
         with:
           command: npm run test:e2e
           start: npm run start-prod  
-          wait-on: http://localhost:5000  
+          wait-on: http://localhost:5000
+      - name: Render Deployment
+        uses: sws2apps/render-deployment@v1.8.0
+        with:
+          apiKey: ${{ secrets.RENDER_API_KEY }}
+          serviceId: ${{ secrets.RENDER_SERVICE_ID }}
 
