@@ -25,6 +25,6 @@ jobs:
         uses: cypress-io/github-action@v5
         with:
           command: npm run test:e2e
-          start: npm run start-prod  # Inicia el servidor antes de los tests
-          wait-on: http://localhost:5000  # Espera a que el servidor esté disponible
+          start: npm run start-prod  
+          wait-on: http://localhost:5000  
 
