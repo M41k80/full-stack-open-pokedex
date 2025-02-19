@@ -9,6 +9,7 @@ module.exports = {
     es6: true,
     jest: true,
     node: true,
+    "cypress/globals": true
   },
   extends: [
     'eslint:recommended',
@@ -26,6 +27,7 @@ module.exports = {
   plugins: [
     'react',
     'jest',
+    'cypress'
   ],
   rules: {
     indent: ['error', 2],
@@ -38,5 +40,7 @@ module.exports = {
     'arrow-spacing': ['error', { before: true, after: true }],
     'no-console': 'error',
     'react/prop-types': 0,
+    "no-unused-vars": "warn",
+    "no-undef": "off"
   },
 }
