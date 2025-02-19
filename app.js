@@ -1,12 +1,20 @@
-const express = require('express')
-const app = express()
+const express = require('express');
+const path = require('path');
+const app = express();
 
-// get the port from env variable
-const PORT = process.env.PORT || 5000
+// Obtén el puerto de la variable de entorno o usa el puerto 5000 por defecto
+const PORT = process.env.PORT || 5000;
 
-app.use(express.static('dist'))
+// Sirve los archivos estáticos de la carpeta "dist"
+app.use(express.static(path.join(__dirname, 'dist')));
 
+// Maneja todas las rutas y redirige al archivo "index.html"
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
+
+// Inicia el servidor
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
-  console.log(`server started on port ${PORT}`)
-})
+  console.log(`Servidor iniciado en el puerto ${PORT}`);
+});
