@@ -23,8 +23,6 @@ jobs:
         run: npm test
       - name: Install Playwright Browsers
         run: npx playwright install
-      - name: Start the development server
-        run: npm run start-prod
       - name: Run end-to-end tests
         run: npm run test:e2e
         env:
