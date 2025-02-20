@@ -33,3 +33,13 @@ jobs:
         with:
           apiKey: ${{ secrets.RENDER_API_KEY }}
           serviceId: ${{ secrets.RENDER_SERVICE_ID }}
+  tag_release:
+    needs: [simple_deployment_pipeline]  # Depende del trabajo simple_deployment_pipeline
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Bump version and push tag
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        uses: anothrNick/github-tag-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: patch
