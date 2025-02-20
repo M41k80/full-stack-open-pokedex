@@ -40,6 +40,8 @@ jobs:
     needs: [simple_deployment_pipeline]  
     runs-on: ubuntu-20.04
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
       - name: Bump version and push tag
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         uses: anothrNick/github-tag-action@v1
