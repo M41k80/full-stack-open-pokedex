@@ -1,9 +1,12 @@
 name: Deployment pipeline
 
 on:
-  pull_request:
+  push:
     branches:
       - main
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize]
 
 jobs: 
   simple_deployment_pipeline:
@@ -34,7 +37,7 @@ jobs:
           apiKey: ${{ secrets.RENDER_API_KEY }}
           serviceId: ${{ secrets.RENDER_SERVICE_ID }}
   tag_release:
-    needs: [simple_deployment_pipeline]  # Depende del trabajo simple_deployment_pipeline
+    needs: [simple_deployment_pipeline]  
     runs-on: ubuntu-20.04
     steps:
       - name: Bump version and push tag
@@ -42,5 +45,6 @@ jobs:
         uses: anothrNick/github-tag-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: patch
           WITH_V: true
           PRERELEASE: true
