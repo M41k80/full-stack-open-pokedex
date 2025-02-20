@@ -7,6 +7,8 @@ on:
   pull_request:
     branches: [main]
     types: [opened, synchronize]
+env:
+  SKIP_DEPLOY: ${{ contains(join(github.event.commits.*.message), '#skip') }}
 
 jobs: 
   simple_deployment_pipeline:
@@ -31,7 +33,7 @@ jobs:
           start: npm run start-prod  
           wait-on: http://localhost:5000
       - name: Render Deployment
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && env.SKIP_DEPLOY == 'false' }}
         uses: sws2apps/render-deployment@v1.8.0
         with:
           apiKey: ${{ secrets.RENDER_API_KEY }}
@@ -43,7 +45,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
       - name: Bump version and push tag
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && env.SKIP_DEPLOY == 'false' }}
         uses: anothrNick/github-tag-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
