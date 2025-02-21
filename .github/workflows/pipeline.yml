@@ -59,7 +59,7 @@ jobs:
         if: success()
         run: |
           curl -H "Content-Type: application/json" -d '{
-            "content": "✅ **Deployment successful!**\nA new version has been deployed to production.\n\n**Commit:** ${{ github.sha }}\n**Branch:** ${{ github.ref }}"
+            "content": "✅**Health Check Passed!**\n**M41k80**\n**Deployment successful!**\nA new version has been deployed to production.\n\n**Commit:** ${{ github.sha }}\n**Branch:** ${{ github.ref }}"
           }' ${{ secrets.DISCORD_WEBHOOK }}
 
       - name: Notify Discord on failure
