@@ -1,0 +1,25 @@
+name: Health Check part11
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  push:
+    branches:
+      - main
+
+jobs:
+  health_check:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Check application health
+        uses: juliangruber/url-health-check@v1
+        with:
+          url: https://full-stack-open-pokedex-lygk.onrender.com/  
+          timeout: 10000  
+
+      - name: Notify Discord on failure
+        if: failure()
+        run: |
+          curl -H "Content-Type: application/json" -d '{
+            "content": "Fullstack part 11 Hook\nAPP\n— hoy a las $(date +'%-I:%M %p')\n❌ Health Check Failed!\nApplication: https://full-stack-open-pokedex-lygk.onrender.com/\nTime: 0 * * * *\nStatus: Unhealthy"
+          }' ${{ secrets.DISCORD_WEBHOOK }}
