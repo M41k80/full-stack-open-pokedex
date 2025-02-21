@@ -7,10 +7,8 @@ on:
   pull_request:
     branches: [main]
     types: [opened, synchronize]
-env:
-  SKIP_DEPLOY: ${{ contains(join(github.event.commits.*.message), '#skip') }}
 
-jobs: 
+jobs:
   simple_deployment_pipeline:
     runs-on: ubuntu-20.04
     steps:
@@ -38,17 +36,37 @@ jobs:
         with:
           apiKey: ${{ secrets.RENDER_API_KEY }}
           serviceId: ${{ secrets.RENDER_SERVICE_ID }}
+
   tag_release:
-    needs: [simple_deployment_pipeline]  
+    needs: [simple_deployment_pipeline]
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
       - name: Bump version and push tag
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && env.SKIP_DEPLOY == 'false' }}
-        uses: anothrNick/github-tag-action@v1
+        uses: anothrNick/github-tag-action@1.64.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
           WITH_V: true
-          PRERELEASE: true
+
+  notify_discord:
+    needs: [simple_deployment_pipeline]
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Notify Discord on success
+        if: success()
+        uses: rjstone/discord-webhook-notify@v1
+        with:
+          severity: info
+          details: "✅ **Deployment successful!**\nA new version has been deployed to production.\n\n**Commit:** ${{ github.sha }}\n**Branch:** ${{ github.ref }}"
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+
+      - name: Notify Discord on failure
+        if: failure()
+        uses: rjstone/discord-webhook-notify@v1
+        with:
+          severity: error
+          details: "❌ **Deployment failed!**\nThe build or deployment has failed. Please check the logs for more details.\n\n**Commit:** ${{ github.sha }}\n**Branch:** ${{ github.ref }}\n**Workflow:** ${{ github.workflow }}\n**Job:** ${{ github.job }}"
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
